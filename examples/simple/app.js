@@ -1,30 +1,19 @@
-# Server using a JSON presentation layer protocol
-## Usage
+'use strict';
 
-Install JSON Layer:
-```
-npm install json-layer
-```
-
-Start a server:
-```
-var jsonLayer = require('json-layer');
+const jsonLayer = require("../../lib/json-layer");
 
 var server = new jsonLayer.JSONServer('0.0.0.0', 8080, {useCluster:true});
 
 server.start(function(jsonSocket) {
     jsonSocket.on('json-data', function(err, data) {
         if(!err) {
+            console.log(jsonSocket.remoteAddress);
             console.log(data);
             jsonSocket.send({'I have received the following data:': data});
         }
     });
 });
-```
 
-Use a client:
-
-```
 const net = require('net');
 const client = new jsonLayer.JSONLayeredSocket(net.connect({port: 8080}, () => {
   // 'connect' listener
@@ -39,4 +28,3 @@ client.on('json-data', (err, data) => {
 client.on('end', () => {
   console.log('disconnected from server');
 });
-```
